@@ -1,19 +1,15 @@
 package io.lycoris;
 
+import com.twitter.scrooge.Compiler;
+import com.twitter.scrooge.Main;
 import org.gradle.api.DefaultTask;
 import org.gradle.api.tasks.*;
+import scala.collection.JavaConverters;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
-import scala.collection.JavaConverters;
-
-
-import com.twitter.scrooge.Compiler;
-import com.twitter.scrooge.Main;
-
 
 public class ScroogeCompileTask extends DefaultTask {
     private File _dest = new File("/src/gen/java/");
@@ -22,7 +18,7 @@ public class ScroogeCompileTask extends DefaultTask {
     private String _lang = "java";
 
     @OutputDirectory
-    private File getDest() {
+    public File getDest() {
         return _dest;
     }
 
@@ -32,7 +28,7 @@ public class ScroogeCompileTask extends DefaultTask {
 
 
     @InputFiles
-    private Iterable<File> getThriftFiles() {
+    public Iterable<File> getThriftFiles() {
         return _files;
     }
 
@@ -42,7 +38,7 @@ public class ScroogeCompileTask extends DefaultTask {
 
     @Input
     @Optional
-    private List<String> getOpts() {
+    public List<String> getOpts() {
         return _opts;
     }
 

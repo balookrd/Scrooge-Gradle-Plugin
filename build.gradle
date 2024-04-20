@@ -4,9 +4,6 @@ buildscript {
             url "https://plugins.gradle.org/m2/"
         }
     }
-    dependencies {
-        classpath "com.gradle.publish:plugin-publish-plugin:0.12.0"
-    }
     ext.scalaMainVersion = '2.12'
 }
 
@@ -14,48 +11,39 @@ plugins {
     id 'java'
     id 'maven-publish'
     id 'java-gradle-plugin'
-    id 'com.gradle.plugin-publish' version '0.12.0'
+    id 'com.gradle.plugin-publish' version '1.2.1'
     id 'scala'
 }
 
 apply plugin: "maven-publish"
 
 sourceCompatibility = 1.8
+targetCompatibility = 1.8
 
 repositories {
     mavenCentral()
     mavenLocal()
-    jcenter()
 }
 
 dependencies {
-    compile gradleApi()
-    compile 'com.twitter:scrooge-generator_' + '2.12' + ':' + scroogeVersion
-    testCompile group: 'junit', name: 'junit', version: '4.12'
+    implementation gradleApi()
+    implementation 'com.twitter:scrooge-generator_' + '2.12' + ':' + scroogeVersion
+    testImplementation group: 'junit', name: 'junit', version: '4.12'
 }
+
+version scroogeVersion
+group 'io.github.balookrd'
 
 gradlePlugin {
+    website = 'https://github.com/balookrd/Scrooge-Gradle-Plugin/'
+    vcsUrl = 'https://github.com/balookrd/Scrooge-Gradle-Plugin'
     plugins {
-        ScroogeGradlePlugin {
-            id = 'io.schibsted.scrooge-gradle-plugin'
+        create("scroogeGradlePlugin") {
+            id = 'io.github.balookrd.scrooge-gradle-plugin'
             implementationClass = 'io.lycoris.ScroogePlugin'
-        }
-    }
-}
-group 'io.schibsted'
-version scroogeVersion
-
-pluginBundle {
-    website = 'https://github.com/schibsted/Scrooge-Gradle-Plugin/'
-    vcsUrl = 'https://github.com/schibsted/Scrooge-Gradle-Plugin'
-    description = 'A gradle plugin for compiling Thrift to Java using Scrooge '
-    tags = ['Thrift', 'Scrooge']
-
-    plugins {
-        ScroogeGradlePlugin {
             displayName = 'Scrooge Gradle Plugin'
-            id = 'io.schibsted.scrooge-gradle-plugin'
-            version = scroogeVersion
+            description = 'A gradle plugin for compiling Thrift to Java using Scrooge '
+            tags.addAll('Thrift', 'Scrooge')
         }
     }
 }
