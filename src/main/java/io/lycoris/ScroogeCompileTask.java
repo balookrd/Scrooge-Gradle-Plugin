@@ -12,6 +12,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class ScroogeCompileTask extends DefaultTask {
+
     private File _dest = new File("/src/gen/java/");
     private Iterable<File> _files = Collections.singletonList(new File("/src/main/thrift/"));
     private List<String> _opts = Collections.singletonList("-v");
@@ -55,12 +56,11 @@ public class ScroogeCompileTask extends DefaultTask {
             thriftFiles.add(item.getAbsolutePath());
         }
 
-        thriftFiles.forEach(item -> System.out.println(item));
+        thriftFiles.forEach(System.out::println);
 
         Compiler compiler = new Compiler();
         compiler.destFolder_$eq(destination);
         compiler.language_$eq(_lang);
-
 
         List<String> args = new ArrayList<>();
         args.addAll(_opts);
