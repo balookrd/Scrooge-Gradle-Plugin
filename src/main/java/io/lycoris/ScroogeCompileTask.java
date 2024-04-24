@@ -13,60 +13,57 @@ import java.util.List;
 
 public class ScroogeCompileTask extends DefaultTask {
 
-    private File _dest = new File("/src/gen/java/");
-    private Iterable<File> _files = Collections.singletonList(new File("/src/main/thrift/"));
-    private List<String> _opts = Collections.singletonList("-v");
-    private String _lang = "java";
+    private Iterable<File> files = Collections.singletonList(new File("src/main/thrift"));
+    private File dest = new File("build/generated-sources/gen-java");
+    private List<String> opts = Collections.singletonList("-v");
 
     @OutputDirectory
     public File getDest() {
-        return _dest;
+        return dest;
     }
 
     public void setDest(File destinationDirectory) {
-        _dest = destinationDirectory;
+        dest = destinationDirectory;
     }
-
 
     @InputFiles
     public Iterable<File> getThriftFiles() {
-        return _files;
+        return files;
     }
 
     public void setThriftFiles(Iterable<File> files) {
-        _files = files;
+        this.files = files;
     }
 
     @Input
     @Optional
     public List<String> getOpts() {
-        return _opts;
+        return opts;
     }
 
     public void setOpts(List<String> opts) {
-        _opts = opts;
+        this.opts = opts;
     }
 
     @TaskAction
     public void compile() {
-        String destination = getDest().getAbsolutePath();
-        List<String> thriftFiles = new ArrayList<>();
-
-        for (File item : _files) {
-            thriftFiles.add(item.getAbsolutePath());
-        }
-
-        thriftFiles.forEach(System.out::println);
 
         Compiler compiler = new Compiler();
-        compiler.destFolder_$eq(destination);
-        compiler.language_$eq(_lang);
+        compiler.destFolder_$eq(dest.getAbsolutePath());
+        compiler.language_$eq("java");
+
+        List<String> thriftFiles = new ArrayList<>();
+        for (File item : files) {
+            thriftFiles.add(item.getAbsolutePath());
+        }
+        thriftFiles.forEach(System.out::println);
 
         List<String> args = new ArrayList<>();
-        args.addAll(_opts);
+        args.addAll(opts);
         args.addAll(thriftFiles);
 
-        Main.parseOptions(compiler, JavaConverters.asScalaIteratorConverter(args.iterator()).asScala().toSeq());
+        Main.parseOptions(compiler,
+                JavaConverters.asScalaIteratorConverter(args.iterator()).asScala().toSeq());
 
         compiler.run();
     }

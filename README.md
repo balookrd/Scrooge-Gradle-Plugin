@@ -9,8 +9,8 @@ usage:
   
 ```  
 compileScrooge {
-    thriftFiles = fileTree(dir: "./src/main/thrift", include: "**/*.thrift")
-    dest = file("src/gen/java")
+    thriftFiles = fileTree(dir: "src/main/thrift", include: "**/*.thrift")
+    dest = file("build/generated-sources/gen-java")
     opts = []    //default Java code, ["-l","scala"] for scala code
 }
 ```
